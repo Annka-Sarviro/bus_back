@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 // const usersRouter = require("./routes/users");
-// const newsRouter = require("./routes/news");
+const cityRouter = require("./routes/city");
 // const friendsRouter = require("./routes/friends");
 // const authRouter = require("./routes/auth");
 // const noticesRoute = require("./routes/noticesRoute");
@@ -28,7 +28,7 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ limit: FILE_LIMIT_SIZE, extended: false }));
 
-// app.use("/news", newsRouter);
+app.use("/city", cityRouter);
 // app.use("/friends", friendsRouter);
 // app.use("/auth", authRouter);
 // app.use("/notices", noticesRoute);
