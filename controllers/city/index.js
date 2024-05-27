@@ -1,5 +1,11 @@
-const getAllCity = require("./getAllCity");
+const getAllCityCTRL = require("./getAllCityCtrl");
+const getCityByIdCTRL = require("./getCityByIdCtrl");
+const createCityCTRL = require("./createCityCtrl");
+const removeCityCTRL = require("./removeCityCtrl");
 
 module.exports = {
-  getAllCity,
+  getAllCityCTRL,
+  getCityByIdCTRL,
+  createCityCTRL,
+  removeCityCTRL,
 };

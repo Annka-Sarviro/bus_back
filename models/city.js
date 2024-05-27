@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
 const citySchema = Schema(
   {
@@ -24,6 +25,14 @@ const citySchema = Schema(
 
 const City = model("city", citySchema);
 
+const citySchemaValidation = Joi.object({
+  title: Joi.string().required().min(1).max(48),
+  address: Joi.string().required().min(2).max(100),
+  coord_x: Joi.number().required(),
+  coord_y: Joi.number().required(),
+});
+
 module.exports = {
   City,
+  citySchemaValidation,
 };
