@@ -34,6 +34,11 @@ const updateBusByIdService = async (id, newData) => {
   return updatedCity;
 };
 
+const updateBusRentableService = async (id, rentable) => {
+  const updatedBus = await Bus.findByIdAndUpdate(id, { rentable: rentable }, { new: true, runValidators: true });
+  return updatedBus;
+};
+
 const deleteBusByIdService = async cityId => {
   const remove = await Bus.findOneAndDelete({ _id: cityId }, {});
   return remove;
@@ -51,4 +56,5 @@ module.exports = {
   updateBusByIdService,
   deleteBusByIdService,
   createBusService,
+  updateBusRentableService,
 };

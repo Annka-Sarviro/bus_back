@@ -30,6 +30,7 @@ app.use(bodyParser.urlencoded({ limit: FILE_LIMIT_SIZE, extended: false }));
 
 app.use("/city", cityRoute);
 app.use("/bus", busRoute);
+// app.use("/rout", routRoute);
 // app.use("/auth", authRouter);
 // app.use("/notices", noticesRoute);
 // app.use("/user", usersRouter);

@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.get("/", asyncWrapper(ctrl.getAllBusCTRL));
 router.get("/:id", isValidId, asyncWrapper(ctrl.getBusByIdCTRL));
+router.patch("/:id/rentable", authenticate, isValidId, asyncWrapper(ctrl.updateBusRentableByIdCTRL));
 router.put("/:id", authenticate, isValidId, validation(busSchemaValidation), asyncWrapper(ctrl.updateBusByIdCTRL));
 router.patch(
   "/:id/image_list",
@@ -17,7 +18,7 @@ router.patch(
   authenticate,
   isValidId,
   validation(busSchemaValidation),
-  asyncWrapper(ctrl.updateBusByIdCTRL)
+  asyncWrapper(ctrl.updateBusImageListByIdCTRL)
 );
 router.post("/", authenticate, upload.single("photo"), validation(busSchemaValidation), asyncWrapper(ctrl.createBusCTRL));
 router.delete("/:id", authenticate, isValidId, asyncWrapper(ctrl.removeBusCTRL));
