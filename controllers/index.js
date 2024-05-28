@@ -1,12 +1,12 @@
 const city = require("./city");
-// const friends = require("./friends");
+const bus = require("./bus");
 // const noticesCTRL = require("./notices");
 // const auth = require("./auth");
 // const users = require("./users");
 
 module.exports = {
   city,
-  //   friends,
+  bus,
   //   noticesCTRL,
   //   auth,
   //   users,

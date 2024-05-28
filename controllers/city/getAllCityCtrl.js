@@ -1,4 +1,3 @@
-// const { City } = require("../../models/city");
 const createError = require("http-errors");
 const { getCityService } = require("../../services/city/cityServices");
 

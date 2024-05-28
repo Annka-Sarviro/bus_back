@@ -1,14 +1,14 @@
 const { RequestError } = require("../../helpers");
-const { deleteCityByIdService } = require("../../services/city/cityServices");
+const { deleteBusByIdService } = require("../../services/bus/busServices");
 
-const removeCityCTRL = async (req, res) => {
+const removeBusCTRL = async (req, res) => {
   const { id: cityId } = req.params;
 
   if (!cityId) {
     throw RequestError(404, "please add id");
   }
 
-  const data = await deleteCityByIdService(cityId);
+  const data = await deleteBusByIdService(cityId);
 
   if (!data) {
     return res.status(404).json({ message: "City with such id not found" });
@@ -17,4 +17,4 @@ const removeCityCTRL = async (req, res) => {
   return res.status(200).json({ message: "successful" });
 };
 
-module.exports = removeCityCTRL;
+module.exports = removeBusCTRL;

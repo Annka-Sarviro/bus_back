@@ -6,7 +6,7 @@ require("dotenv").config();
 
 // const usersRouter = require("./routes/users");
 const cityRoute = require("./routes/cityRoute");
-// const friendsRouter = require("./routes/friends");
+const busRoute = require("./routes/busRoute");
 // const authRouter = require("./routes/auth");
 // const noticesRoute = require("./routes/noticesRoute");
 const app = express();
@@ -29,7 +29,7 @@ app.use(
 app.use(bodyParser.urlencoded({ limit: FILE_LIMIT_SIZE, extended: false }));
 
 app.use("/city", cityRoute);
-// app.use("/friends", friendsRouter);
+app.use("/bus", busRoute);
 // app.use("/auth", authRouter);
 // app.use("/notices", noticesRoute);
 // app.use("/user", usersRouter);

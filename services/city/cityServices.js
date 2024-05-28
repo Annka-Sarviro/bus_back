@@ -27,6 +27,11 @@ const getCityService = async (skip, limit, rest) => {
 
 const getCityByIdService = async id => await City.findById(id);
 
+const updateCityByIdService = async (id, newData) => {
+  const updatedCity = await City.findByIdAndUpdate(id, newData, { new: true, runValidators: true });
+  return updatedCity;
+};
+
 const deleteCityByIdService = async cityId => {
   const remove = await City.findOneAndDelete({ _id: cityId }, {});
   return remove;
@@ -34,13 +39,14 @@ const deleteCityByIdService = async cityId => {
 
 const createCityService = async newData => {
   const newCity = new City({ ...newData });
-  const savedNotice = await newCity.save();
-  return savedNotice;
+  const savedCity = await newCity.save();
+  return savedCity;
 };
 
 module.exports = {
   getCityService,
   getCityByIdService,
+  updateCityByIdService,
   deleteCityByIdService,
   createCityService,
 };
