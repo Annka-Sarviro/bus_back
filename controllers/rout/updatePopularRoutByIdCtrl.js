@@ -1,5 +1,5 @@
 const { RequestError } = require("../../helpers");
-const { updateBusRentableService } = require("../../services/bus/busServices");
+const { updateRoutPopularService } = require("../../services/rout/routServices");
 
 const addRentable = async (req, res) => {
   try {
@@ -8,16 +8,16 @@ const addRentable = async (req, res) => {
     if (!id) {
       throw RequestError(404, "please add id");
     }
-    const rentable = req.body.rentable;
+    const is_popular = req.body.is_popular;
 
-    if (typeof rentable !== "boolean") {
+    if (typeof is_popular !== "boolean") {
       return res.status(400).json({ message: "Please provide rentable data as a boolean" });
     }
 
-    const updatedBus = await updateBusRentableService(id, rentable);
+    const updatedBus = await updateRoutPopularService(id, is_popular);
 
     if (!updatedBus) {
-      return res.status(404).json({ message: "Bus with such id not found" });
+      return res.status(404).json({ message: "Rout with such id not found" });
     }
 
     return res.status(200).json({ message: "successful", results: res.json({ updatedBus }) });
