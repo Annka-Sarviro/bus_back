@@ -125,7 +125,7 @@ const updateRoutPopularService = async (id, is_popular) => {
 };
 
 const updateRoutByIdService = async (id, newData) => {
-  const updatedCity = await Rout.findByIdAndUpdate(id, newData, { new: true, runValidators: true })
+  const updatedRout = await Rout.findByIdAndUpdate(id, newData, { new: true, runValidators: true })
     .populate({
       path: "from_place.city",
       model: City,
@@ -139,7 +139,7 @@ const updateRoutByIdService = async (id, newData) => {
 
       populate: { path: "city", model: City },
     });
-  return updatedCity;
+  return updatedRout;
 };
 
 const deleteRoutByIdService = async cityId => {
