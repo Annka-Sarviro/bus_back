@@ -6,6 +6,7 @@ const updateJourneyByIdCTRL = require("./updateJourneyByIdCtrl");
 const createJourneyCTRL = require("./createJourneyCtrl");
 const removeJourneyCTRL = require("./removeJourneyCtrl");
 const updateJourneyStatusByIdCTRL = require("./updateJourneyStatusByIdCtrl");
+const updateJourneySeatsByIdCTRL = require("./updateJourneySeatsByIdCTRL");
 
 module.exports = {
   getAllJourneyCTRL,
@@ -16,4 +17,5 @@ module.exports = {
   createJourneyCTRL,
   removeJourneyCTRL,
   updateJourneyStatusByIdCTRL,
+  updateJourneySeatsByIdCTRL,
 };

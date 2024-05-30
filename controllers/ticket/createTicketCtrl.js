@@ -5,7 +5,7 @@ const { Ticket } = require("../../models/ticket");
 const { createJourneyService } = require("../../services/journey/journeyServices");
 const createError = require("http-errors");
 
-const addJourneyCTRL = async (req, res) => {
+const createTicketCTRL = async (req, res) => {
   try {
     const { bus, rout, departure_date, arrival_date, is_active } = req.body;
 
@@ -34,8 +34,6 @@ const addJourneyCTRL = async (req, res) => {
       const newTicket = new Ticket({
         seat_number: i,
         status: "new",
-        bus: findBus._id,
-        rout: findRout._id,
       });
       firstFloorTickets.push(newTicket);
     }
@@ -67,4 +65,4 @@ const addJourneyCTRL = async (req, res) => {
   }
 };
 
-module.exports = addJourneyCTRL;
+module.exports = createTicketCTRL;

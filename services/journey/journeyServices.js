@@ -2,6 +2,7 @@ const { Bus } = require("../../models/bus");
 const { City } = require("../../models/city");
 const { Journey } = require("../../models/journey");
 const { Rout } = require("../../models/rout");
+const { Ticket } = require("../../models/ticket");
 
 const getJourneyService = async (skip, limit, rest) => {
   const { filter = "" } = rest;
@@ -271,6 +272,31 @@ const updateJourneyStatusService = async (id, is_active) => {
   return updatedJourney;
 };
 
+const updateJourneySeatsService = async (id, seat_number, new_status) => {
+  const journey = await Journey.findById(id);
+
+  console.log("aa", journey.seats);
+  let seat = journey.seats.first_flour_seats.find(seat => seat.seat_number === seat_number);
+
+  if (!seat) {
+    seat = journey.seats.second_flour_seats.find(seat => seat.seat_number === parseInt(seat_number));
+  }
+  if (!seat) {
+    return [];
+  }
+
+  seat.status = new_status;
+  const ticket = await Ticket.findById(seat.tickets_id);
+  if (!ticket) {
+    return { message: "Ticket not found" };
+  }
+  ticket.status = new_status;
+  await journey.save();
+  await ticket.save();
+  const new_Journey = await Journey.findById(id);
+  return new_Journey;
+};
+
 const updateJourneyByIdService = async (id, newData) => {
   const updatedJourney = await Journey.findByIdAndUpdate(id, newData, { new: true, runValidators: true })
     .populate({
@@ -298,12 +324,12 @@ const updateJourneyByIdService = async (id, newData) => {
   return updatedJourney;
 };
 
-const deleteJourneyByIdService = async cityId => {
-  const remove = await Journey.findOneAndDelete({ _id: cityId }, {});
+const deleteJourneyByIdService = async journeyId => {
+  const remove = await Journey.findOneAndDelete({ _id: journeyId }, {});
   return remove;
 };
 
-const createJourneyService = async (bus, rout, departure_date, arrival_date, is_active) => {
+const createJourneyService = async (bus, rout, departure_date, arrival_date, is_active, createdFirstFloorTickets, createdSecondFloorTickets) => {
   const newJourney = new Journey({
     bus: bus,
     rout: rout,
@@ -312,6 +338,15 @@ const createJourneyService = async (bus, rout, departure_date, arrival_date, is_
     is_active: is_active,
     created_at: new Date().toISOString(),
   });
+
+  newJourney.seats.first_flour_seats = createdFirstFloorTickets.map(ticket => ({
+    seat_number: ticket.seat_number,
+    tickets_id: ticket._id,
+  }));
+  newJourney.seats.second_flour_seats = createdSecondFloorTickets.map(ticket => ({
+    seat_number: ticket.seat_number,
+    tickets_id: ticket._id,
+  }));
 
   await newJourney.save();
   return newJourney;
@@ -326,4 +361,5 @@ module.exports = {
   getActiveJourneyService,
   getArchiveJourneyService,
   updateJourneyStatusService,
+  updateJourneySeatsService,
 };
