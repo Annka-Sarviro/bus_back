@@ -1,20 +1,21 @@
 const { RequestError } = require("../../helpers");
-const { getJourneyByIdService } = require("../../services/journey/journeyServices");
+const { getTicketByIdService } = require("../../services/ticket/ticketServices");
 
 const getTicketByIdCTRL = async (req, res) => {
+  console.log("a");
   const { id } = req.params;
 
   if (!id) {
     throw RequestError(404, { message: "please add id" });
   }
 
-  const journey = await getJourneyByIdService(id);
+  const ticket = await getTicketByIdService(id);
 
-  if (!journey) {
-    return res.status(404).json({ message: "journey with such id not found" });
+  if (!ticket) {
+    return res.status(404).json({ message: "ticket with such id not found" });
   }
 
-  return res.status(200).json({ journey });
+  return res.status(200).json({ ticket });
 };
 
 module.exports = getTicketByIdCTRL;

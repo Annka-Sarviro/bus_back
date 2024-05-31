@@ -17,15 +17,9 @@ const ticketSchema = Schema({
     ref: "User",
     required: false,
   },
-  bus: {
+  journey: {
     type: Schema.Types.ObjectId,
-    ref: "Bus",
-    required: true,
-  },
-  rout: {
-    type: Schema.Types.ObjectId,
-    ref: "Rout",
-    required: true,
+    ref: "Journey",
   },
   order_id: {
     type: String,
@@ -39,10 +33,15 @@ const ticketSchema = Schema({
 });
 
 const Ticket = model("ticket", ticketSchema);
+
+const ticketStatusSchema = Joi.object({
+  status: Joi.string().valid("new", "blocked", "reserve", "ordered").default("new"),
+});
+
 const ticketSchemaJoi = Joi.object({
   seat_number: Joi.number().required(),
-  status: Joi.array().items(Joi.string().valid("new", "blocked", "reserve", "ordered")).default("new"),
-
+  status: Joi.string().valid("new", "blocked", "reserve", "ordered").default("new"),
+  journey: Joi.string(),
   user: Joi.string(),
   order_id: Joi.string(),
   price: Joi.number(),
@@ -52,4 +51,5 @@ const ticketSchemaJoi = Joi.object({
 module.exports = {
   Ticket,
   ticketSchemaJoi,
+  ticketStatusSchema,
 };

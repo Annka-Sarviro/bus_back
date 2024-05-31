@@ -1,12 +1,12 @@
 const { RequestError } = require("../../helpers");
 
-const { updateJourneyByIdService } = require("../../services/journey/journeyServices");
+const { updateTicketByIdService } = require("../../services/ticket/ticketServices");
 const createError = require("http-errors");
 
 const updateTicketByIdCTRL = async (req, res) => {
-  const { id: journeyId } = req.params;
+  const { id: ticketId } = req.params;
 
-  if (!journeyId) {
+  if (!ticketId) {
     throw RequestError(404, "please add id");
   }
 
@@ -14,13 +14,13 @@ const updateTicketByIdCTRL = async (req, res) => {
 
   try {
     const newData = { ...data };
-    const updateJourney = await updateJourneyByIdService(journeyId, newData);
+    const updateTicket = await updateTicketByIdService(ticketId, newData);
 
-    if (!updateJourney) {
-      return res.status(404).json({ message: "JourneyId with such id not found" });
+    if (!updateTicket) {
+      return res.status(404).json({ message: "ticket with such id not found" });
     }
 
-    return res.status(200).json({ updateJourney });
+    return res.status(200).json({ updateTicket });
   } catch (error) {
     throw createError(400, error.message);
   }

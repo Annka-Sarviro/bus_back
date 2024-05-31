@@ -1,17 +1,17 @@
 const { RequestError } = require("../../helpers");
-const { deleteJourneyByIdService } = require("../../services/journey/journeyServices");
+const { deleteTicketByIdService } = require("../../services/ticket/ticketServices");
 
 const removeTicketCTRL = async (req, res) => {
-  const { id: journeyId } = req.params;
+  const { id: ticketId } = req.params;
 
-  if (!journeyId) {
+  if (!ticketId) {
     throw RequestError(404, "please add id");
   }
 
-  const data = await deleteJourneyByIdService(journeyId);
+  const data = await deleteTicketByIdService(ticketId);
 
   if (!data) {
-    return res.status(404).json({ message: "Journey with such id not found" });
+    return res.status(404).json({ message: "Ticket with such id not found" });
   }
 
   return res.status(200).json({ message: "successful" });

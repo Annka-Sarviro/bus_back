@@ -275,7 +275,6 @@ const updateJourneyStatusService = async (id, is_active) => {
 const updateJourneySeatsService = async (id, seat_number, new_status) => {
   const journey = await Journey.findById(id);
 
-  console.log("aa", journey.seats);
   let seat = journey.seats.first_flour_seats.find(seat => seat.seat_number === seat_number);
 
   if (!seat) {

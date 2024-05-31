@@ -27,17 +27,15 @@ const addJourneyCTRL = async (req, res) => {
       return res.status(404).json({ message: "Arrival Date not found" });
     }
 
-    const firstFloorTickets = [];
-    const secondFloorTickets = [];
+    const firstFloorSeats = [];
+    const secondFloorSeats = [];
 
     for (let i = 1; i <= findBus.first_floor_seats_count; i++) {
       const newTicket = new Ticket({
         seat_number: i,
         status: "new",
-        bus: findBus._id,
-        rout: findRout._id,
       });
-      firstFloorTickets.push(newTicket);
+      firstFloorSeats.push(newTicket);
     }
 
     for (let i = findBus.first_floor_seats_count + 1; i <= findBus.first_floor_seats_count + findBus.second_floor_seats_count; i++) {
@@ -45,21 +43,27 @@ const addJourneyCTRL = async (req, res) => {
         seat_number: i,
         status: "new",
       });
-      secondFloorTickets.push(newTicket);
+      secondFloorSeats.push(newTicket);
     }
 
-    const createdFirstFloorTickets = await Ticket.insertMany(firstFloorTickets);
-    const createdSecondFloorTickets = await Ticket.insertMany(secondFloorTickets);
+    const savedFirstFloorTickets = await Ticket.insertMany(firstFloorSeats);
+    const savedSecondFloorTickets = await Ticket.insertMany(secondFloorSeats);
 
-    const newJourney = await createJourneyService(
-      bus,
-      rout,
-      departure_date,
-      arrival_date,
-      is_active,
-      createdFirstFloorTickets,
-      createdSecondFloorTickets
-    );
+    const newJourney = await createJourneyService(bus, rout, departure_date, arrival_date, is_active, firstFloorSeats, secondFloorSeats);
+
+    const firstFloorTickets = savedFirstFloorTickets.map(ticket => ({
+      ...ticket.toObject(),
+      journey: newJourney._id,
+    }));
+
+    const secondFloorTickets = savedSecondFloorTickets.map(ticket => ({
+      ...ticket.toObject(),
+      journey: newJourney._id,
+    }));
+
+    // Збереження оновлених квитків
+    await Ticket.updateMany({ _id: { $in: firstFloorTickets.map(ticket => ticket._id) } }, { $set: { journey: newJourney._id } });
+    await Ticket.updateMany({ _id: { $in: secondFloorTickets.map(ticket => ticket._id) } }, { $set: { journey: newJourney._id } });
 
     return res.status(201).json({ newJourney });
   } catch (error) {
