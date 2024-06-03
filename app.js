@@ -4,14 +4,13 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-// const usersRouter = require("./routes/users");
 const cityRoute = require("./routes/cityRoute");
 const busRoute = require("./routes/busRoute");
 const routRoute = require("./routes/routRoute");
 const journeyRoute = require("./routes/journeyRoute");
 const ticketRoute = require("./routes/ticketRoute");
-// const authRouter = require("./routes/auth");
-// const noticesRoute = require("./routes/noticesRoute");
+const authRoute = require("./routes/authRoute");
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -36,9 +35,7 @@ app.use("/bus", busRoute);
 app.use("/rout", routRoute);
 app.use("/journey", journeyRoute);
 app.use("/ticket", ticketRoute);
-// app.use("/auth", authRouter);
-// app.use("/notices", noticesRoute);
-// app.use("/user", usersRouter);
+app.use("/auth", authRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

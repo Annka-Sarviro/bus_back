@@ -3,8 +3,7 @@ const bus = require("./bus");
 const rout = require("./rout");
 const journey = require("./journey");
 const ticket = require("./ticket");
-// const auth = require("./auth");
-// const users = require("./users");
+const auth = require("./auth");
 
 module.exports = {
   city,
@@ -12,7 +11,5 @@ module.exports = {
   rout,
   journey,
   ticket,
-  //   noticesCTRL,
-  //   auth,
-  //   users,
+  auth,
 };

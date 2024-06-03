@@ -246,7 +246,7 @@ const updateTicketStatusService = async (id, status) => {
   });
 
   await journey.save();
-
+  // 15 хвилинне блокування квитка для оплати
   if (status === "blocked") {
     setTimeout(async () => {
       const ticket = await Ticket.findById(id);
@@ -254,7 +254,6 @@ const updateTicketStatusService = async (id, status) => {
         ticket.status = "new";
         await ticket.save();
 
-        // Оновлюємо статус місця в Journey
         const journey = await Journey.findById(ticket.journey);
 
         if (journey) {
@@ -273,7 +272,7 @@ const updateTicketStatusService = async (id, status) => {
           await journey.save();
         }
       }
-    }, 1 * 60 * 1000); // 15 хвилин у мілісекундах
+    }, 15 * 60 * 1000);
   }
 
   return updatedTicket;
