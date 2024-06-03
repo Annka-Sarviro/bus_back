@@ -39,6 +39,15 @@ const userSchema = Schema(
       type: String,
       default: "No phone",
     },
+    ticket: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Ticket",
+          required: true,
+        },
+      ],
+    },
     status: {
       type: String,
       enum: ["admin", "worker", "customer", "user"],
@@ -79,7 +88,26 @@ const refreshJoiSchema = Joi.object({
   refresh_token: Joi.string(),
 });
 
-const schemasUser = { registerJoiSchema, loginJoiSchema, refreshJoiSchema };
+const updateJoiSchema = Joi.object({
+  password: Joi.string()
+    .trim()
+    .regex(passwordRegex)
+
+    .messages({
+      "string.empty": `password must contain value`,
+      "string.pattern.base": `${passwordMessage}`,
+    }),
+  email: Joi.string().trim().email().messages({
+    "string.base": `email should be a type of string`,
+    "string.empty": `email must contain value`,
+  }),
+  name: Joi.string().empty(""),
+  phone: Joi.string().empty(""),
+  birthday: Joi.string().empty(""),
+  status: Joi.string().empty(""),
+});
+
+const schemasUser = { registerJoiSchema, loginJoiSchema, refreshJoiSchema, updateJoiSchema };
 
 module.exports = {
   User,

@@ -4,12 +4,13 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
+const authRoute = require("./routes/authRoute");
 const cityRoute = require("./routes/cityRoute");
 const busRoute = require("./routes/busRoute");
 const routRoute = require("./routes/routRoute");
 const journeyRoute = require("./routes/journeyRoute");
 const ticketRoute = require("./routes/ticketRoute");
-const authRoute = require("./routes/authRoute");
+const userRoute = require("./routes/userRoute");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/bus", busRoute);
 app.use("/rout", routRoute);
 app.use("/journey", journeyRoute);
 app.use("/ticket", ticketRoute);
+app.use("/user", userRoute);
 app.use("/auth", authRoute);
 
 app.use((req, res) => {

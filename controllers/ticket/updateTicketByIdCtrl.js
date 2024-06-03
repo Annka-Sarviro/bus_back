@@ -2,6 +2,7 @@ const { RequestError } = require("../../helpers");
 
 const { updateTicketByIdService } = require("../../services/ticket/ticketServices");
 const createError = require("http-errors");
+const { addTicketToUser } = require("../../services/user/userServices");
 
 const updateTicketByIdCTRL = async (req, res) => {
   const { id: ticketId } = req.params;
@@ -11,13 +12,19 @@ const updateTicketByIdCTRL = async (req, res) => {
   }
 
   const data = req.body;
-
+  const { _id: user_id } = req.user;
   try {
-    const newData = { ...data };
+    const newData = { ...data, user: user_id };
     const updateTicket = await updateTicketByIdService(ticketId, newData);
 
     if (!updateTicket) {
       return res.status(404).json({ message: "ticket with such id not found" });
+    }
+
+    const user = await addTicketToUser(user_id, ticketId);
+
+    if (!user) {
+      return res.status(404).json({ message: "user with such id not found" });
     }
 
     return res.status(200).json({ updateTicket });

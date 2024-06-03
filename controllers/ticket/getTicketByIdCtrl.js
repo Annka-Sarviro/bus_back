@@ -2,7 +2,6 @@ const { RequestError } = require("../../helpers");
 const { getTicketByIdService } = require("../../services/ticket/ticketServices");
 
 const getTicketByIdCTRL = async (req, res) => {
-  console.log("a");
   const { id } = req.params;
 
   if (!id) {

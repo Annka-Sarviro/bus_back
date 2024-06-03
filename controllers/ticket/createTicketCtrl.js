@@ -12,8 +12,8 @@ const createTicketCTRL = async (req, res) => {
     if (!journey_data) {
       return res.status(404).json({ message: "Journey not found" });
     }
-
-    const newTicket = await createTicketService(seat_number, journey_data, status, price, order_id);
+    const { _id: user_id } = req.user;
+    const newTicket = await createTicketService(seat_number, journey_data, status, price, order_id, user_id);
 
     return res.status(201).json({ newTicket });
   } catch (error) {

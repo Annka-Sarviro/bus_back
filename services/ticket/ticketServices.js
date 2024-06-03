@@ -121,7 +121,7 @@ const getTicketsService = async (skip, perPage, status, rest) => {
   return tickets;
 };
 
-const createTicketService = async (seat_number, journey_data, status, price, order_id) => {
+const createTicketService = async (seat_number, journey_data, status, price, order_id, user_id) => {
   const newTicket = new Ticket({
     seat_number: seat_number,
     status: status,
@@ -129,6 +129,7 @@ const createTicketService = async (seat_number, journey_data, status, price, ord
     price: price,
     order_id: order_id,
     ordered_data: new Date().toISOString(),
+    user_id: user_id,
   });
 
   await newTicket.save();
