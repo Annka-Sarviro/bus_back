@@ -5,6 +5,7 @@ const journey = require("./journey");
 const ticket = require("./ticket");
 const auth = require("./auth");
 const user = require("./user");
+const variable = require("./variable");
 
 module.exports = {
   city,
@@ -14,4 +15,5 @@ module.exports = {
   ticket,
   auth,
   user,
+  variable,
 };

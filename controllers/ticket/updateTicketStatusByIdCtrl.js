@@ -12,6 +12,10 @@ const updateTicketStatusByIdCTRL = async (req, res) => {
 
     const updatedTicket = await updateTicketStatusService(id, status);
 
+    if (req.user.status !== "admin" && (!updatedTicket.user || updatedTicket.user._id.toString() !== req.user._id.toString())) {
+      throw RequestError(403, "No access rights");
+    }
+
     if (!updatedTicket) {
       return res.status(404).json({ message: "Ticket with such id not found" });
     }
