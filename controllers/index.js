@@ -6,6 +6,8 @@ const ticket = require("./ticket");
 const auth = require("./auth");
 const user = require("./user");
 const variable = require("./variable");
+const page = require("./page");
+const contact = require("./contact");
 
 module.exports = {
   city,
@@ -16,4 +18,6 @@ module.exports = {
   auth,
   user,
   variable,
+  page,
+  contact,
 };

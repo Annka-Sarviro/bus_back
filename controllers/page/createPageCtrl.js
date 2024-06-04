@@ -1,11 +1,11 @@
-const { createBusService } = require("../../services/bus/busServices");
+const { createPageService } = require("../../services/page/pageService");
 const createError = require("http-errors");
 const Jimp = require("jimp");
 const fs = require("fs/promises");
 const cloudinary = require("../../helpers/cloudinary");
 const imgSizePx = 500;
 
-const addBusCTRL = async (req, res) => {
+const createPageCTRL = async (req, res) => {
   const data = req.body;
   let newPath = null;
 
@@ -28,13 +28,13 @@ const addBusCTRL = async (req, res) => {
   }
 
   try {
-    const newData = newPath ? { ...data, photo: newPath } : data;
-    const newBus = await createBusService(newData);
+    const newData = newPath ? { ...data, img: newPath } : data;
 
-    return res.status(201).json({ newBus });
+    const newPage = await createPageService(newData);
+
+    return res.status(201).json({ newPage });
   } catch (error) {
     throw createError(400, error.message);
   }
 };
-
-module.exports = addBusCTRL;
+module.exports = createPageCTRL;

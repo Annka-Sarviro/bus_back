@@ -12,6 +12,8 @@ const journeyRoute = require("./routes/journeyRoute");
 const ticketRoute = require("./routes/ticketRoute");
 const userRoute = require("./routes/userRoute");
 const variableRoute = require("./routes/variableRoute");
+const staticPageRoute = require("./routes/staticPageRoute");
+const contactRoute = require("./routes/contactRoute");
 
 const app = express();
 
@@ -40,6 +42,8 @@ app.use("/ticket", ticketRoute);
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/variable", variableRoute);
+app.use("/pages", staticPageRoute);
+app.use("/contact", contactRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
