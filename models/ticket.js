@@ -35,6 +35,9 @@ const ticketSchema = Schema({
     enum: ["adult", "child"],
     default: "adult",
   },
+  additional_baggage: {
+    type: String,
+  },
 });
 
 const Ticket = model("ticket", ticketSchema);
@@ -52,6 +55,7 @@ const ticketSchemaJoi = Joi.object({
   price: Joi.number(),
   ordered_data: Joi.date().iso(),
   passenger_type: Joi.string(),
+  additional_baggage: Joi.string(),
 });
 
 module.exports = {

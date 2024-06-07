@@ -17,7 +17,11 @@ const userSchema = Schema(
       required: [true, "Email is required"],
       unique: true,
     },
-    name: {
+    first_name: {
+      type: String,
+      default: "NewUser",
+    },
+    last_name: {
       type: String,
       default: "NewUser",
     },
@@ -72,7 +76,8 @@ const registerJoiSchema = Joi.object({
     "string.base": `email should be a type of string`,
     "string.empty": `email must contain value`,
   }),
-  name: Joi.string().empty(""),
+  first_name: Joi.string().empty(""),
+  last_name: Joi.string().empty(""),
   phone: Joi.string().empty(""),
   birthday: Joi.string(),
   access_token: Joi.string(),
@@ -101,7 +106,8 @@ const updateJoiSchema = Joi.object({
     "string.base": `email should be a type of string`,
     "string.empty": `email must contain value`,
   }),
-  name: Joi.string().empty(""),
+  last_name: Joi.string().empty(""),
+  first_name: Joi.string().empty(""),
   phone: Joi.string().empty(""),
   birthday: Joi.string().empty(""),
   status: Joi.string().empty(""),
