@@ -29,10 +29,12 @@
     "eslint": "^7.19.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
-    "nodemon": "^3.1.1"
+    "nodemon": "^3.1.1",
+    "prettier": "^3.3.1",
+    "prettier-plugin-import-sort": "^0.0.7"
   },
   "description": "nodeJS api bus project",
   "main": ".eslintrc.js",

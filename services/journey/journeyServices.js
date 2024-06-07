@@ -77,9 +77,9 @@ const getJourneyService = async (skip, limit, rest) => {
 };
 
 const getActiveJourneyService = async (skip, limit, rest) => {
-  const { filter = "" } = rest;
+  const { from_city = "", to_city = "" } = rest;
 
-  if (!filter) {
+  if (!from_city && !to_city) {
     const journey = await Journey.find({ is_active: true }, "", {
       skip,
       limit: limit,
@@ -111,40 +111,79 @@ const getActiveJourneyService = async (skip, limit, rest) => {
     return journey;
   }
 
-  const journey = await Journey.find(
+  const journey = await Journey.aggregate([
     {
-      $and: [
-        {
-          $or: [{ title: { $regex: filter, $options: "i" } }, { address: { $regex: filter, $options: "i" } }],
-        },
-      ],
+      $lookup: {
+        from: "routs",
+        localField: "rout",
+        foreignField: "_id",
+        as: "rout",
+      },
     },
-    {},
-    { skip, limit }
-  )
-    .sort({ createdAt: -1 })
-    .populate({
-      path: "bus",
-      model: Bus,
-    })
-    .populate({
-      path: "rout",
-      model: Rout,
-      populate: [
-        {
-          path: "from_place.city",
-          model: City,
+    {
+      $unwind: "$rout",
+    },
+    {
+      $lookup: {
+        from: "cities",
+        localField: "rout.from_place.city",
+        foreignField: "_id",
+        as: "fromCity",
+      },
+    },
+    {
+      $unwind: "$fromCity",
+    },
+    {
+      $lookup: {
+        from: "cities",
+        localField: "rout.to_place.city",
+        foreignField: "_id",
+        as: "toCity",
+      },
+    },
+    {
+      $unwind: "$toCity",
+    },
+    {
+      $lookup: {
+        from: "cities",
+        localField: "rout.stops.city",
+        foreignField: "_id",
+        as: "stopsCities",
+      },
+    },
+    {
+      $unwind: {
+        path: "$stopsCities",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $match: {
+        "toCity.title": { $regex: new RegExp(to_city, "i") },
+        "fromCity.title": { $regex: new RegExp(from_city, "i") },
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        rout: {
+          $first: {
+            id: "$rout._id",
+            from_place: "$fromCity",
+            to_place: "$toCity",
+            stops: "$stopsCities",
+            is_popular: "$is_popular",
+          },
         },
-        {
-          path: "to_place.city",
-          model: City,
-        },
-        {
-          path: "stops.city",
-          model: City,
-        },
-      ],
-    });
+        departure_date: { $first: "$departure_date" },
+        arrival_date: { $first: "$arrival_date" },
+        created_at: { $first: "$created_at" },
+        is_active: { $first: "$is_active" },
+      },
+    },
+  ]);
   return journey;
 };
 
@@ -182,42 +221,6 @@ const getArchiveJourneyService = async (skip, limit, rest) => {
 
     return journey;
   }
-
-  const journey = await Journey.find(
-    {
-      $and: [
-        {
-          $or: [{ title: { $regex: filter, $options: "i" } }, { address: { $regex: filter, $options: "i" } }],
-        },
-      ],
-    },
-    {},
-    { skip, limit }
-  )
-    .sort({ createdAt: -1 })
-    .populate({
-      path: "bus",
-      model: Bus,
-    })
-    .populate({
-      path: "rout",
-      model: Rout,
-      populate: [
-        {
-          path: "from_place.city",
-          model: City,
-        },
-        {
-          path: "to_place.city",
-          model: City,
-        },
-        {
-          path: "stops.city",
-          model: City,
-        },
-      ],
-    });
-  return journey;
 };
 
 const getJourneyByIdService = async id =>
