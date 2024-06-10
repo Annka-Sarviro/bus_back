@@ -77,9 +77,9 @@ const getJourneyService = async (skip, limit, rest) => {
 };
 
 const getActiveJourneyService = async (skip, limit, rest) => {
-  const { from_city = "", to_city = "" } = rest;
+  const { from_city = "", to_city = "", from_date = "" } = rest;
 
-  if (!from_city && !to_city) {
+  if (!from_city && !to_city && !from_date) {
     const journey = await Journey.find({ is_active: true }, "", {
       skip,
       limit: limit,
@@ -163,6 +163,7 @@ const getActiveJourneyService = async (skip, limit, rest) => {
       $match: {
         "toCity.title": { $regex: new RegExp(to_city, "i") },
         "fromCity.title": { $regex: new RegExp(from_city, "i") },
+        departure_date: { $gte: new Date(from_date) },
       },
     },
     {
