@@ -165,6 +165,7 @@ const getActiveJourneyService = async (skip, limit, rest) => {
           to_place: {
             city: "$toCity",
             arrival_time: "$rout.to_place.arrival_time",
+            price: "$rout.to_place.price",
           },
           stops: {
             $map: {
