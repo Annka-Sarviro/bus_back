@@ -120,9 +120,7 @@ const getActiveJourneyService = async (skip, limit, rest) => {
         as: "rout",
       },
     },
-    {
-      $unwind: "$rout",
-    },
+    { $unwind: "$rout" },
     {
       $lookup: {
         from: "cities",
@@ -131,9 +129,7 @@ const getActiveJourneyService = async (skip, limit, rest) => {
         as: "fromCity",
       },
     },
-    {
-      $unwind: "$fromCity",
-    },
+    { $unwind: "$fromCity" },
     {
       $lookup: {
         from: "cities",
@@ -142,21 +138,13 @@ const getActiveJourneyService = async (skip, limit, rest) => {
         as: "toCity",
       },
     },
-    {
-      $unwind: "$toCity",
-    },
+    { $unwind: "$toCity" },
     {
       $lookup: {
         from: "cities",
         localField: "rout.stops.city",
         foreignField: "_id",
         as: "stopsCities",
-      },
-    },
-    {
-      $unwind: {
-        path: "$stopsCities",
-        preserveNullAndEmptyArrays: true,
       },
     },
     {
@@ -167,21 +155,39 @@ const getActiveJourneyService = async (skip, limit, rest) => {
       },
     },
     {
-      $group: {
-        _id: "$_id",
+      $project: {
         rout: {
-          $first: {
-            id: "$rout._id",
-            from_place: "$fromCity",
-            to_place: "$toCity",
-            stops: "$stopsCities",
-            is_popular: "$is_popular",
+          id: "$rout._id",
+          from_place: {
+            city: "$fromCity",
+            departure_time: "$rout.from_place.departure_time",
           },
+          to_place: {
+            city: "$toCity",
+            arrival_time: "$rout.to_place.arrival_time",
+          },
+          stops: {
+            $map: {
+              input: "$rout.stops",
+              as: "stop",
+              in: {
+                city: {
+                  $arrayElemAt: ["$stopsCities", { $indexOfArray: ["$stopsCities._id", "$$stop.city"] }],
+                },
+                departure_time: "$$stop.departure_time",
+                arrival_time: "$$stop.arrival_time",
+                price: "$$stop.price",
+                stop_number: "$$stop.stop_number",
+                is_stop: "$$stop.is_stop",
+              },
+            },
+          },
+          is_popular: "$rout.is_popular",
         },
-        departure_date: { $first: "$departure_date" },
-        arrival_date: { $first: "$arrival_date" },
-        created_at: { $first: "$created_at" },
-        is_active: { $first: "$is_active" },
+        departure_date: 1,
+        arrival_date: 1,
+        created_at: 1,
+        is_active: 1,
       },
     },
   ]);
