@@ -148,6 +148,18 @@ const getActiveJourneyService = async (skip, limit, rest) => {
       },
     },
     {
+      $lookup: {
+        from: "buses",
+        localField: "bus",
+        foreignField: "_id",
+        as: "bus",
+      },
+    },
+    {
+      $unwind: "$bus",
+    },
+
+    {
       $match: {
         "toCity.title": { $regex: new RegExp(to_city, "i") },
         "fromCity.title": { $regex: new RegExp(from_city, "i") },
@@ -173,7 +185,12 @@ const getActiveJourneyService = async (skip, limit, rest) => {
               as: "stop",
               in: {
                 city: {
-                  $arrayElemAt: ["$stopsCities", { $indexOfArray: ["$stopsCities._id", "$$stop.city"] }],
+                  $arrayElemAt: [
+                    "$stopsCities",
+                    {
+                      $indexOfArray: ["$stopsCities._id", "$$stop.city"],
+                    },
+                  ],
                 },
                 departure_time: "$$stop.departure_time",
                 arrival_time: "$$stop.arrival_time",
@@ -185,6 +202,8 @@ const getActiveJourneyService = async (skip, limit, rest) => {
           },
           is_popular: "$rout.is_popular",
         },
+        bus: "$bus",
+        seats: 1, // Include seats field in the output
         departure_date: 1,
         arrival_date: 1,
         created_at: 1,
@@ -192,6 +211,7 @@ const getActiveJourneyService = async (skip, limit, rest) => {
       },
     },
   ]);
+
   return journey;
 };
 
