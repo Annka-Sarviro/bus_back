@@ -169,7 +169,7 @@ const getActiveJourneyService = async (skip, limit, rest) => {
     {
       $project: {
         rout: {
-          id: "$rout._id",
+          _id: "$rout._id",
           from_place: {
             city: "$fromCity",
             departure_time: "$rout.from_place.departure_time",
