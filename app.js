@@ -22,6 +22,16 @@ const FILE_LIMIT_SIZE = 9000000;
 
 app.use(logger(formatsLogger));
 app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Разрешить запросы с любых доменов
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+    credentials: true, // Если вы работаете с cookies
+    optionsSuccessStatus: 204,
+  })
+);
+
 app.use(express.json());
 app.use(express.static("public"));
 
